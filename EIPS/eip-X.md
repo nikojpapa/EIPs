@@ -17,22 +17,22 @@ The contract is funded with ETH, which can only be retrieved by solving the prob
 On-chain applications can then watch this contract to be aware of the quantum advantage milestone of solving this puzzle.
 For example, Ethereum smart contract wallets can, using custom verification schemes such as those based on [ERC-4337](./eip-4337.md), watch this contract and fall back to a quantum secure signature verification scheme if and when it is solved.
 
-The contract, then, serves the two purposes of (1) showing proof of a strict quantum supremacy[1] that is strong enough to 
-indicate concerns in RSA and ECDSA security, and (2) acting as a leading indicator to protect Ethereum assets by triggering quantum-secure 
+The contract, then, serves the two purposes of (1) showing proof of a strict quantum supremacy[^1] that is strong enough to 
+indicate concerns in RSA and ECDSA security, and (2) acting as an indicator to protect Ethereum assets by triggering quantum-secure 
 signature verification schemes.
 
 ## Motivation
 
-Quantum supremacy[1] would be a demonstration of a quantum computer solving a problem that would take a classical computer an infeasible amount of time to solve.
-Previous attempts have been made to demonstrate quantum supremacy, e.g. Kim[2], Arute[3] and Morvan[4], 
-but they have been refuted or at least claimed to have no practical benefit, e.g. Begusic and Chan[5], Pednault[6], 
+Quantum supremacy[^1] is a demonstration that a quantum computer can solve a problem that would take a classical computer an infeasible amount of time to solve.
+Previous attempts have been made to demonstrate quantum supremacy, e.g. Kim[^2], Arute[^3] and Morvan[^4], 
+but they have been refuted or at least claimed to have no practical benefit, e.g. Begusic and Chan[^5], Pednault[^6], 
 and a quote from Sebastian Weidt (The Telegraph, "Supercomputer makes calculations in blink of an eye that take rivals 47 years", 2023).
-Quantum supremacy, by its current definition, is "irrespective of the usefulness of the problem".
-This proposal, however, focuses on a stricter definition of a problem that indicates the earliest sign where an adversary may soon bypass current Ethereum cryptography standards.
+Quantum supremacy, by its current definition, is irrespective of the usefulness of the problem.
+This EIP, however, focuses on a stricter definition of a problem that indicates when an adversary may soon or already be able to bypass current Ethereum cryptography standards.
 This contract serves as trustless, unbiased proof of this strong quantum supremacy by generating a classically intractable problem on chain, 
 to which even the creator does not know the solution.
 
-Since quantum computers are expected[7] to break current security standards,
+Since quantum computers are expected[^7] to break current security standards,
 Ethereum assets are at risk. However, implementing quantum-secure
 protocols can be costly and complicated.
 In order to delay unnecessary costs, Ethereum assets can continue using current cryptographic standards and only fall back
@@ -50,7 +50,7 @@ in order to withdraw funds and mark the contract as solved.
 
 | Parameter                 | Value         |
 |---------------------------|---------------|
-| `BIT_SIZE_OF_PRIMES`      | `3072`        |
+| `BIT_SIZE_OF_PRIMES`      | `1,024`       |
 | `EIP_X_SINGLETON_ADDRESS` | `TBD`         |
 | `MINIMUM_GAS_PAYOUT`      | `600,000,000` |
 | `NUMBER_OF_LOCKS`         | `119`         |
@@ -58,13 +58,12 @@ in order to withdraw funds and mark the contract as solved.
 ### Puzzle
 
 The puzzles that this contract generates are of prime factorization,
-where given a positive integer _n_, the objective is to find a list of prime numbers whose product is equal to _n_.
+where given a positive integer _n_, the objective is to find the set of prime numbers whose product is equal to _n_.
 
 
 ### Requirements
 
-- This contract MUST generate each of the `NUMBER_OF_LOCKS` locks by generating an integer of exactly `BIT_SIZE_OF_PRIMES` random bits.
-- This contract MUST accept ETH from any account without restriction.
+- This contract MUST generate each of the `NUMBER_OF_LOCKS` locks by generating an integer of exactly 3 * `BIT_SIZE_OF_PRIMES` random bits.
 - This contract MUST allow someone to provide the prime factorization of any lock.
   If it is the correct solution and solves the last unsolved lock, then this contract MUST send all of its ETH to the solver and mark a flag to indicate that this contract has been solved.
 
@@ -89,7 +88,7 @@ Upon solving the final solution,
 
 ### Bounty funds
 
-- Funds covering at least `MINIMUM_GAS_PAYOUT` gas SHALL be sent to the contract as a bounty.
+- Funds covering at least `MINIMUM_GAS_PAYOUT` gas SHALL be sent to the contract as a bounty. As a rough estimate for an example, if the current market price is 23.80 Gwei per gas, the contract SHALL have at least 14.28 ETH as a bounty. 
   The funds must be updated to cover this amount as the value of gas increases.
 - The contract MUST accept any additional funds from any account as a donation to the bounty.
 
@@ -97,8 +96,8 @@ Upon solving the final solution,
 
 ### Puzzle
 
-Prime factorization has a known, efficient, quantum solution[8]
-but is believed to be intractable for classical computers. This then reliably serves as a test for strong quantum supremacy, since
+Prime factorization has a known, efficient, quantum solution[^8]
+but is widely believed to be intractable for classical computers. This, then, reliably serves as a test for strong quantum supremacy since
 finding a solution to this problem should only be doable by a quantum computer.
 
 
@@ -106,14 +105,14 @@ finding a solution to this problem should only be doable by a quantum computer.
 
 The solver SHALL be reimbursed at least the cost of verifying the puzzle solutions. Therefore, to estimate the cost, an estimate
 can be calculated by providing the solution of a known factorization. 
-The expected number of prime factors is log(log(_n_)), so the expected
-number of prime factors of a 3072-bit integer is less than 12. 
+The expected number of prime factors is on the order of log(log(_n_))[^9],
+so the expected number of prime factors of a 3072-bit integer is less than 12. 
 
-Deploying a contract with 119 locks of a provided 3072-bit integer having 16 factors then providing that solution for
-each of them resulted in a cost of 583,338,223 gas. Providing a solution for a single lock cost 4,959,717 gas.
+Deploying a contract with 119 locks of a provided 3072-bit integer having 16 factors, then providing that solution for
+each of them, resulted in a cost of 583,338,223 gas. Providing a solution for a single lock cost 4,959,717 gas.
 The majority of the cost comes from verifying that the provided factors are indeed prime with the Miller-Rabin primality test.
 
-Since the number of factors is greater than the expected[9] number of factors of any integer, this may serve as an initial estimate of the cost to verify the solutions for randomly generated integers. Therefore, since the total cost is less than
+Since the number of factors in this [test](../assets/eip-X/test/bounty-contracts/prime-factoring-bounty/cost-of-solving-primes.test.ts) is greater than the expected number of factors of any integer, this may serve as an initial estimate of the cost to verify the solutions for randomly generated integers. Therefore, since the total cost is less than
 `MINIMUM_GAS_PAYOUT` gas, a bounty covering at least `MINIMUM_GAS_PAYOUT` should be funded to the contract.
 
 
@@ -124,28 +123,28 @@ Backwards compatibility does not apply as there are no past versions of a contra
 ## Test Cases
 
 - [Random Bytes Accumulator](../assets/eip-X/test/bounty-contracts/support/random-bytes-accumulator.test.ts)
-- [RSA UFO Generation](../assets/eip-X/test/bounty-contracts/prime-factoring-bounty/prime-factoring-bounty-with-rsa-ufo/prime-factoring-bounty-with-rsa-ufo.test.ts)
+- [RSA-UFO Generation](../assets/eip-X/test/bounty-contracts/prime-factoring-bounty/prime-factoring-bounty-with-rsa-ufo/prime-factoring-bounty-with-rsa-ufo.test.ts)
 - [Prime Factoring Bounty](../assets/eip-X/test/bounty-contracts/prime-factoring-bounty/prime-factoring-bounty-with-predetermined-locks/prime-factoring-bounty-with-predetermined-locks.test.ts)
 
 ## Reference Implementation
 
 - [Quantum Supremacy Contract](../assets/eip-X/contracts/bounty-contracts/prime-factoring-bounty/prime-factoring-bounty-with-rsa-ufo/PrimeFactoringBountyWithRsaUfo.sol)
 
-- Example proof-of-concept [Account](../assets/eip-X/contracts/bounty-fallback-account/BountyFallbackAccount.sol) 
+- Example proof-of-concept [account](../assets/eip-X/contracts/bounty-fallback-account/BountyFallbackAccount.sol) 
   having a quantum secure verification scheme after quantum supremacy trigger
 
 ## Security Considerations
 
 ### Bit-length of the integers
-Sander[11] proves that difficult to factor numbers without a known factorization, called an RSA-UFO, can be generated.
-Using logic based on that described by Anoncoin using this method, this contract shall generate `NUMBER_OF_LOCKS` integers of `BIT_SIZE_OF_PRIMES` bits each to achieve a one in a billion chance of being insecure.
+Sander[^11] proves that difficult to factor numbers without a known factorization, called RSA-UFOs, can be generated.
+Using logic based on that described by Anoncoin using this method, this contract shall generate `NUMBER_OF_LOCKS` integers of 3 * `BIT_SIZE_OF_PRIMES` bits each to achieve a one in a billion chance of being insecure.
 
 #### Predicted security
 ##### Classical
-Burt Kaliski and RSA Laboratories ("TWIRL and RSA Key Size", 2003) recommends 3,072-bit key sizes for RSA to be secure beyond 2030.
+Burt Kaliski and RSA Laboratories ("TWIRL and RSA Key Size", 2003) recommends 3072-bit key sizes for RSA to be secure beyond 2030.
 
 ##### Quantum
-Breaking 256-bit elliptic curve encryption is expected[12] to require 2,330 qubits, although with current fault-tolerant regime, it is expected[13] that 13 * 10^6 physical qubits would be required to break this encryption within one day.
+Breaking 256-bit elliptic curve encryption is expected[^12] to require 2,330 qubits, although with current fault-tolerant regime, it is expected[^13] that 13 * 10^6 physical qubits would be required to break this encryption within one day.
 
 ### Choosing the puzzle
 The following are other options that were considered as the puzzle to be used along with the reasoning for not using them.
@@ -155,40 +154,42 @@ The following are other options that were considered as the puzzle to be used al
 Order-finding can be defined as follows: given a positive integer _n_ and an integer _a_ coprime to _n_, 
 find the smallest positive integer _k_ such that _a_ ^ _k_ = 1 (mod _n_).
 
-Order-finding can be reduced[10] to factoring, and vice-versa. Therefore, the puzzle must first generate hard-to-factor numbers with high probability as a modulus and then generating a random numbers coprime to those moduli.
+Order-finding can be reduced[^10] to factoring, and vice-versa. Therefore, the puzzle must first generate hard-to-factor numbers with high probability as a modulus and then generate random numbers coprime to those moduli.
 
-To compare costs with the factoring puzzle, each were deployed and solved using known solutions.
+To compare costs with the factoring puzzle, we may compare the contracts using these puzzles in two ways: (1) verifying known solutions and (2) deploying.
 
-To verify solutions, an order-finding contract was deployed with a lock having a random 3071-bit base and a random 3072-bit
-modulus. Cleve[14] defines the quantum order-finding problem to have an order no greater than twice the bit size of the modulus, 
+To verify submitted solutions, an order-finding contract was [deployed](../assets/eip-X/test/bounty-contracts/order-finding-bounty/cost-of-solving-order.test.ts) with a lock having a random 3072-bit
+modulus and a random 3071-bit base. Cleve[^14] defines the quantum order-finding problem to have an order no greater than twice the bit size of the modulus, 
 i.e. 768 bytes. Therefore, 768 random solutions of byte size equal to its iteration were sent to the contract. 
 The maximum gas cost from these iterations was 4,835,737 gas, the minimum was 108,948, the mean was 2,472,370, and the median was 2,478,643.
 
-Deploying 119 locks at 3,072 bits costed 4,029,364,172 gas, which includes testing that the generated base was neither 1
+[Deploying](../assets/eip-X/deploy/2_deploy_order_finding_bounty.ts) an order-finding contract with 119 locks at 3,072 bits resulted in a cost of 4,029,364,172 gas, which includes testing that the generated base was neither 1
 nor -1 and was coprime with the modulus. Alternatively, deploying without checking for being coprime could also use a
-probabilistic method. Deploying the contract at 119 locks without checking for coprimality costed 242,370,598 gas. However,
-since two randomly generated integers have about 0.61 chance of being coprime[15], 
-generating 23 random pairs would have a one in a billion chance of having no coprime pairs. So, this probabilistic method
+probabilistic method. Deploying the contract at 119 locks without checking for coprimality resulted in a cost of 242,370,598 gas. However,
+since two randomly generated integers have about 0.61 chance of being coprime[^15], 
+one would need to generate 23 random pairs to have a one in a billion chance of having no coprime pairs. So, this probabilistic method
 would also cost a large amount, possibly more, depending on the satisfactory probability.
 
-Deploying the prime factorization puzzle, on the other hand, was seen to cost 150,994,811 gas when generating 119 locks 
-of size 3,072 bits.
+[Deploying](../assets/eip-X/deploy/1_deploy_prime_factoring_bounty.ts) the prime factorization puzzle, on the other hand, resulted in a cost of 150,994,811 gas when generating 119 locks of size 3,072 bits.
 
-This opens up a debatable question as to which puzzle would be less costly and for which party. Order-finding has a much
-higher deploy cost but also has a chance of costing far less to the solver, which would decrease the barrier to entry of
-solving the problem. However, prime factorization likely costs less to deploy and, in the worst case of order-finding, 
+This opens up a debatable question as to which puzzle should be used based on which would be less costly and for which party. Order-finding has a much
+higher deployment cost but also has a chance of costing far less to the solver, which would decrease the barrier to entry of
+providing solutions to the problem. However, prime factorization likely costs less to deploy and, in the worst case of order-finding, 
 costs about the same to verify solutions.
 
-#### Sign a message given a public key
-Given a random public key, the solver would need to sign a message, which the contract would verify to have been 
-correctly signed by the public key. 
-The downside to this approach is that the contract would act less like a leading indicator to secure ETH funds 
-as by the time the puzzle is solved, the ability to forge signatures will have already been achieved.
+#### Sign a message without the secret key
+The solver would need to sign a message, which the contract would verify to have been 
+correctly signed by the public key.
+
+Since quantum computers are not currently expected to be able to reverse hash functions, one could not sign a message with only the public address alone. 
+Hence, the contract could not simply randomly generate a public address with which the solver could sign a message. 
+Rather, it would need to generate a secret key in order to generate and sign messages that the solver could use to sign their own message.
+This opens up trust issues, as the minter of the contract has the capability to see the secret key and therefore could provide the solution without needing a quantum computer.
 
 #### Factor a product of large, generated primes
 Instead of generating an RSA-UFO, the contract could implement current RSA key generation protocols and first generate 
 two large primes to produces the product of the primes. 
-This method has the flaw that the minter has the capability to see the primes, 
+This method again has the flaw that the minter has the capability to see the primes, 
 and therefore some level of trust would need to be given that the minter would throw the values away.
 
 #### Decentralized trusted setup
@@ -208,8 +209,8 @@ Additionally, even if a large percentage of the proposers collude to censor, the
 ## Copyright
 Copyright and related rights waived via [CC0](../LICENSE.md).
 
-[1]:
-```csl-json
+[^1]:
+    ```csl-json
     {
       "type": "misc"
       "id": 1,
@@ -229,8 +230,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "URL": "https://doi.org/10.48550/arXiv.1203.5813"
     }
     ```
-[2]:
-```csl-json
+[^2]:
+    ```csl-json
     {
       "type": "article"
       "id": 2,
@@ -290,8 +291,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "URL": "https://doi.org/10.1038/s41586-023-06096-3"
     }
     ```
-[3]:
-```csl-json
+[^3]:
+    ```csl-json
     {
       "type": "article"
       "id": 3,
@@ -306,8 +307,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "URL": "https://doi.org/10.1038/s41586-019-1666-5"
     }
     ```
-[4]:
-```csl-json
+[^4]:
+    ```csl-json
     {
       "type": "misc"
       "id": 4,
@@ -322,8 +323,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "URL": "https://doi.org/10.48550/arXiv.2304.11119"
     }
     ```
-[5]:
-```csl-json
+[^5]:
+    ```csl-json
     {
       "type": "misc"
       "id": 5,
@@ -338,7 +339,7 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "URL": "https://doi.org/10.48550/arXiv.2306.16372"
     }
     ```
-[6]:
+[^6]:
 ```csl-json
     {
       "type": "misc"
@@ -358,8 +359,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
         ]
       }
     ```
-[7]:
-```csl-json
+[^7]:
+    ```csl-json
     {
       "type": "article"
       "id": 7,
@@ -373,8 +374,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       },
       "URL": "https://doi.org/10.1038/d41586-023-00017-0"
     ```
-[8]:
-```csl-json
+[^8]:
+    ```csl-json
     {
       "type": "article"
       "id": 8,
@@ -388,8 +389,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       },
       "URL": "https://doi.org/10.1137/S0097539795293172"
     ```
-[9]:
-```csl-json
+[^9]:
+    ```csl-json
     {
       "type": "article"
       "id": 9,
@@ -408,8 +409,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
         ]
       }
     ```
-[10]:
-```csl-json
+[^10]:
+    ```csl-json
     {
       "type": "article"
       "id": 10,
@@ -423,8 +424,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       },
       "URL": "https://doi.org/10.1016/0890-5401(87)90030-7"
     ```
-[11]:
-```csl-json
+[^11]:
+    ```csl-json
     {
       "type": "inproceedings"
       "id": 11,
@@ -442,8 +443,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
         ]
       }
     ```
-[12]:
-```csl-json
+[^12]:
+    ```csl-json
     {
       "type": "misc"
       "id": 12,
@@ -457,8 +458,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       },
       "URL": "https://doi.org/10.48550/arXiv.1706.06752"
     ```
-[13]:
-```csl-json
+[^13]:
+    ```csl-json
     {
       "type": "article"
       "id": 13,
@@ -472,8 +473,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       },
       "URL": "https://doi.org/10.1116/5.0073075"
     ```
-[14]:
-```csl-json
+[^14]:
+    ```csl-json
     {
       "type": "misc"
       "id": 14,
@@ -492,8 +493,8 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
         ]
       }
     ```
-[15]:
-```csl-json
+[^15]:
+    ```csl-json
     {
       "type": "inproceedings"
       "id": 15,
