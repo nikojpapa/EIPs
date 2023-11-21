@@ -340,7 +340,7 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
     }
     ```
 [^6]:
-```csl-json
+    ```csl-json
     {
       "type": "misc"
       "id": 6,
