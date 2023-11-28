@@ -23,7 +23,7 @@ signature verification schemes.
 
 ## Motivation
 
-Quantum supremacy[^1] is a demonstration that a quantum computer can solve a problem that would take a classical computer an infeasible amount of time to solve.
+Quantum supremacy[^1] is a demonstration of a quantum computer solving a problem that would take a classical computer an infeasible amount of time to solve.
 Previous attempts have been made to demonstrate quantum supremacy, e.g. Kim[^2], Arute[^3] and Morvan[^4], 
 but they have been refuted or at least claimed to have no practical benefit, e.g. Begusic and Chan[^5], Pednault[^6], 
 and a quote from Sebastian Weidt (The Telegraph, "Supercomputer makes calculations in blink of an eye that take rivals 47 years", 2023).
