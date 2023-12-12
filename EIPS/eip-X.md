@@ -196,6 +196,11 @@ and therefore some level of trust would need to be given that the minter would t
 A paper in 2018 [^16] provides a proof of quantumness protocol based on cryptographic methods and randomness.
 However, this method requires a trapdoor, or information that is kept secret from the verifier. This cannot be guaranteed in a blockchain context and is therefore unsecure in the same way that factoring a product of large, generated primes is unsecure.
 
+#### Sampling problems
+Harrow and Montanaro[^17] survey sampling problems, which have been proposed as a form of quantum supremacy verification. 
+The challenge for these is verifying that the given samples were indeed sampled from the desired probability distribution.
+This contract must use a problem that is verifiable, and therefore sampling problems will not suffice.
+
 #### Decentralized trusted setup
 This inherently has a trust factor, albeit very small. It requires that at least one person in the party is honest.
 A fully trustless setup is preferred. However, further investigation may be done to potentially uncover a valid puzzle that uses a 
@@ -482,7 +487,27 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "URL": "https://doi.org/10.48550/arXiv.1804.00640",
       "custom": {
         "additional-urls": [
-          "https://10.1109/FOCS.2018.00038"
+          "https://doi.org/10.1109/FOCS.2018.00038"
+        ]
+      }
+    ```
+[^17]:
+    ```csl-json
+    {
+      "type": "inproceedings"
+      "id": 17,
+      "author"=[{"family": "Harrow", "given": "Aram W."}, {"family": "Montanaro", "given": "Ashley"}],
+      "DOI": "10.1038/nature23458",
+      "title": "Quantum computational supremacy", 
+      "original-date": {
+        "date-parts": [
+          [2018, 07, 09]
+        ]
+      },
+      "URL": "https://doi.org/10.48550/arXiv.1809.07442",
+      "custom": {
+        "additional-urls": [
+          "https://doi.org/10.1038/nature23458"
         ]
       }
     ```
