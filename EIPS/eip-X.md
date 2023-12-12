@@ -192,6 +192,10 @@ two large primes to produces the product of the primes.
 This method again has the flaw that the minter has the capability to see the primes, 
 and therefore some level of trust would need to be given that the minter would throw the values away.
 
+#### A Cryptographic Test of Quantumness
+A paper in 2018 [^16] provides a proof of quantumness protocol based on cryptographic methods and randomness.
+However, this method requires a trapdoor, or information that is kept secret from the verifier. This cannot be guaranteed in a blockchain context and is therefore unsecure in the same way that factoring a product of large, generated primes is unsecure.
+
 #### Decentralized trusted setup
 This inherently has a trust factor, albeit very small. It requires that at least one person in the party is honest.
 A fully trustless setup is preferred. However, further investigation may be done to potentially uncover a valid puzzle that uses a 
@@ -214,12 +218,7 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
     {
       "type": "misc"
       "id": 1,
-      "author"=[
-        {
-          "family": "Preskill",
-          "given": "John"
-        }
-      ],
+      "author"=[{"family": "Preskill", "given": "John"}],
       "DOI": "10.48550/arXiv.1203.5813",
       "title": "Quantum computing and the entanglement frontier", 
       "original-date": {
@@ -235,52 +234,7 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
     {
       "type": "article"
       "id": 2,
-      "author"=[
-        {
-          "family": "Kim",
-          "given": "Youngseok"
-        },
-        {
-          "family": "Eddins",
-          "given": "Andrew"
-        },
-        {
-          "family": "Anand",
-          "given": "Sajant"
-        },
-        {
-          "family": "Wei",
-          "given": "Ken Xuan"
-        },
-        {
-          "family": "van den Berg",
-          "given": "Ewout"
-        },
-        {
-          "family": "Rosenblatt",
-          "given": "Sami"
-        },
-        {
-          "family": "Nayfeh",
-          "given": "Hasan"
-        },
-        {
-          "family": "Wu",
-          "given": "Yantao"
-        },
-        {
-          "family": "Zaletel",
-          "given": "Michael"
-        },
-        {
-          "family": "Temme",
-          "given": "Kristan"
-        },
-        {
-          "family": "Kandala",
-          "given": "Abhinav"
-        },
-      ],
+      "author"=[{'family': 'Kim', 'given': 'Youngseok'}, {'family': 'Eddins', 'given': 'Andrew'}, {'family': 'Anand', 'given': 'Sajant'}, {'family': 'Wei', 'given': 'Ken Xuan'}, {'family': 'van den Berg', 'given': 'Ewout'}, {'family': 'Rosenblatt', 'given': 'Sami'}, {'family': 'Nayfeh', 'given': 'Hasan'}, {'family': 'Wu', 'given': 'Yantao'}, {'family': 'Zaletel', 'given': 'Michael'}, {'family': 'Temme', 'given': 'Kristan'}, {'family': 'Kandala', 'given': 'Abhinav'}],
       "DOI": "10.1038/s41586-023-06096-3",
       "title": "Evidence for the utility of quantum computing before fault tolerance", 
       "original-date": {
@@ -509,6 +463,26 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "custom": {
         "additional-urls": [
           "https://doi.org/10.1007/3-540-51084-2_23"
+        ]
+      }
+    ```
+[^16]:
+    ```csl-json
+    {
+      "type": "inproceedings"
+      "id": 16,
+      "author"=[{"family": "Brakerski", "given": "Zvika"}, {"family": "Christiano", "given": "Paul"}, {"family": "Mahadev", "given": "Urmila"}, {"family": "Vazirani", "given": "Umesh"}, {"family": "Vidick", "given": "Thomas"}],
+      "DOI": "10.1109/FOCS.2018.00038",
+      "title": "A Cryptographic Test of Quantumness and Certifiable Randomness from a Single Quantum Device", 
+      "original-date": {
+        "date-parts": [
+          [2018, 07, 09]
+        ]
+      },
+      "URL": "https://doi.org/10.48550/arXiv.1804.00640",
+      "custom": {
+        "additional-urls": [
+          "https://10.1109/FOCS.2018.00038"
         ]
       }
     ```
