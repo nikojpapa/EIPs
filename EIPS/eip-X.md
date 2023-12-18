@@ -141,6 +141,14 @@ Burt Kaliski and RSA Laboratories ("TWIRL and RSA Key Size", 2003) recommends 30
 ##### Quantum
 Breaking 256-bit elliptic curve encryption is expected[^12] to require 2,330 qubits, although with current fault-tolerant regime, it is expected[^13] that 13 * 10^6 physical qubits would be required to break this encryption within one day.
 
+### Front running and censorship
+
+One day is required before one can reveal a commitment. It is largely infeasible to censor an economically viable transaction for such a period of time.
+
+Assuming the reveal transaction is willing to pay market rate for transaction fees, the 1559 fee mechanism and its exponential adjustment makes it infeasible for an economic attacker to spam costly transactions to artifically increase the base-fee for extended period of time.
+
+Additionally, even if a large percentage of the proposers collude to censor, the inclusion of the reveal transaction on chain will be delayed but only as a function of the ratio of censoring to non-censoring proposers. E.g., if 90% of proposers censor, then the reveal transaction will take 10x as long as expected to be included -- on the order of 120s given mainnet block times. If, instead, 99% of proposers censor, then the transaction will take ~100x as long to be included -- on the order of 1200s. Still in these extreme regimes, reveal times on the order of a day are safe.
+
 ### Choosing the puzzle
 The following are other options that were considered as the puzzle to be used along with the reasoning for not using them.
 
@@ -201,8 +209,8 @@ This inherently has a trust factor, albeit very small. It requires that at least
 A fully trustless setup is preferred. However, further investigation may be done to potentially uncover a valid puzzle that uses a 
 decentralized setup and has an advantage (perhaps with a lower cost or a greater leading indicator) worth the additional trust.
 
-### Verifiable Quantum Advantage without Structure
-Yamakawa and Zhandry[^18] analyze a problem that may be used for this puzzle in which all that needs to be decided are the parameters for a suitable Folded Reed-Solomon code, as described in the paper. 
+#### Verifiable Quantum Advantage without Structure
+Yamakawa and Zhandry[^18] analyze a problem that seems promising as an option for this puzzle in which all that needs to be decided are the parameters for a suitable Folded Reed-Solomon code, as described in the paper. 
 This seems promising as a sooner leading indicator, as it would likely require fewer qubits to solve and therefore likely be solved before the integer factoring puzzle, allowing ETH funds to be protected with lower risk.
 Furthermore, it would likely cost far less to deploy and verify solutions since the problem would not need to be generated probabilistically using many large numbers.
 
@@ -215,15 +223,6 @@ On the other end, the tradeoff would be a longer risk of theft of their ETH but 
 Hence, this integer factoring puzzle may serve as the latter of the extremes.
 If this puzzle is solved, then one may assume that the power of quantum computers has already surpassed the ability to break ECDSA verification schemes.
 This allows users to watch this contract as an extreme safeguard in the case that they want to save more ETH with a greater risk of theft by a quantum advantage. 
-
-
-### Front running and censorship
-
-One day is required before one can reveal a commitment. It is largely infeasible to censor an economically viable transaction for such a period of time.
-
-Assuming the reveal transaction is willing to pay market rate for transaction fees, the 1559 fee mechanism and its exponential adjustment makes it infeasible for an economic attacker to spam costly transactions to artifically increase the base-fee for extended period of time.
-
-Additionally, even if a large percentage of the proposers collude to censor, the inclusion of the reveal transaction on chain will be delayed but only as a function of the ratio of censoring to non-censoring proposers. E.g., if 90% of proposers censor, then the reveal transaction will take 10x as long as expected to be included -- on the order of 120s given mainnet block times. If, instead, 99% of proposers censor, then the transaction will take ~100x as long to be included -- on the order of 1200s. Still in these extreme regimes, reveal times on the order of a day are safe.
 
 ## Copyright
 Copyright and related rights waived via [CC0](../LICENSE.md).
