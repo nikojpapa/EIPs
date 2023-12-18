@@ -188,7 +188,7 @@ This method again has the flaw that the minter has the capability to see the pri
 and therefore some level of trust would need to be given that the minter would throw the values away.
 
 #### A Cryptographic Test of Quantumness
-A paper in 2018 [^16] provides a proof of quantumness protocol based on cryptographic methods and randomness.
+A paper in 2018[^16] provides a proof of quantumness protocol based on cryptographic methods and randomness.
 However, this method requires a trapdoor, or information that is kept secret from the verifier. This cannot be guaranteed in a blockchain context and is therefore unsecure in the same way that factoring a product of large, generated primes is unsecure.
 
 #### Sampling problems
@@ -200,6 +200,21 @@ This contract must use a problem that is verifiable, and therefore sampling prob
 This inherently has a trust factor, albeit very small. It requires that at least one person in the party is honest.
 A fully trustless setup is preferred. However, further investigation may be done to potentially uncover a valid puzzle that uses a 
 decentralized setup and has an advantage (perhaps with a lower cost or a greater leading indicator) worth the additional trust.
+
+### Verifiable Quantum Advantage without Structure
+Yamakawa and Zhandry[^18] analyze a problem that may be used for this puzzle in which all that needs to be decided are the parameters for a suitable Folded Reed-Solomon code, as described in the paper. 
+This seems promising as a sooner leading indicator, as it would likely require fewer qubits to solve and therefore likely be solved before the integer factoring puzzle, allowing ETH funds to be protected with lower risk.
+Furthermore, it would likely cost far less to deploy and verify solutions since the problem would not need to be generated probabilistically using many large numbers.
+
+This actually opens up the idea of puzzle advancement or alternatives in general.
+There could be many puzzles developed in the future with different security levels or other advantages and tradeoffs. 
+These would provide a scale of warnings, where there would be a tradeoff for users. 
+On one end of the scale, the tradeoff would be a shorter risk of theft of their ETH but a sooner implementation of costly verification schemes. 
+On the other end, the tradeoff would be a longer risk of theft of their ETH but a later implementation of costly verification schemes.
+
+Hence, this integer factoring puzzle may serve as the latter of the extremes.
+If this puzzle is solved, then one may assume that the power of quantum computers has already surpassed the ability to break ECDSA verification schemes.
+This allows users to watch this contract as an extreme safeguard in the case that they want to save more ETH with a greater risk of theft by a quantum advantage. 
 
 
 ### Front running and censorship
@@ -503,6 +518,26 @@ Copyright and related rights waived via [CC0](../LICENSE.md).
       "custom": {
         "additional-urls": [
           "https://doi.org/10.1038/nature23458"
+        ]
+      }
+    ```
+[^18]:
+    ```csl-json
+    {
+      "type": "inproceedings"
+      "id": 18,
+      "author"=[{"family": "Yamakawa", "given": "T."}, {"family": "Zhandry", "given": "M."}],
+      "DOI": "10.1109/FOCS54457.2022.00014",
+      "title": "Verifiable Quantum Advantage without Structure", 
+      "original-date": {
+        "date-parts": [
+          [2022, 11]
+        ]
+      },
+      "URL": "https://doi.org/10.48550/arXiv.2204.02063",
+      "custom": {
+        "additional-urls": [
+          "https://doi.ieeecomputersociety.org/10.1109/FOCS54457.2022.00014"
         ]
       }
     ```
