@@ -115,11 +115,6 @@ The majority of the cost comes from verifying that the provided factors are inde
 Since the number of factors in this [test](../assets/eip-X/test/bounty-contracts/prime-factoring-bounty/cost-of-solving-primes.test.ts) is greater than the expected number of factors of any integer, this may serve as an initial estimate of the cost to verify the solutions for randomly generated integers. Therefore, since the total cost is less than
 `MINIMUM_GAS_PAYOUT` gas, a bounty covering at least `MINIMUM_GAS_PAYOUT` should be funded to the contract.
 
-
-## Backwards Compatibility
-
-Backwards compatibility does not apply as there are no past versions of a contract of this sort.
-
 ## Test Cases
 
 - [Random Bytes Accumulator](../assets/eip-X/test/bounty-contracts/support/random-bytes-accumulator.test.ts)
