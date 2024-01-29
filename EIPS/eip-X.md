@@ -40,7 +40,6 @@ to a quantum-secure scheme when there is reasonable risk of security failure due
 Therefore, this contract can serve to protect one's funds on Ethereum by acting as a trigger that activates when 
 strong quantum supremacy has been achieved by solving the classically intractable puzzle.
 
-
 ## Specification
 
 ### Parameters
@@ -60,12 +59,11 @@ in order to withdraw funds and mark the contract as solved.
 The puzzles that this contract generates are of prime factorization,
 where given a positive integer _n_, the objective is to find the set of prime numbers whose product is equal to _n_.
 
-
 ### Requirements
 
-- This contract MUST generate each of the `NUMBER_OF_LOCKS` locks by generating an integer of exactly 3 * `BIT_SIZE_OF_PRIMES` random bits.
+- This contract MUST generate each of the `NUMBER_OF_LOCKS` locks by generating an integer of exactly `3 * BIT_SIZE_OF_PRIMES` random bits.
 - This contract MUST allow someone to provide the prime factorization of any lock.
-  If it is the correct solution and solves the last unsolved lock, then this contract MUST send all of its ETH to the solver and mark a flag to indicate that this contract has been solved.
+  If it is the correct solution and solves the last unsolved lock, then this contract MUST send all of its ETH to the solver and mark a publicly readable flag to indicate that this contract has been solved.
 
 ### Deployment method
 
@@ -100,7 +98,6 @@ Prime factorization has a known, efficient, quantum solution[^8]
 but is widely believed to be intractable for classical computers. This, then, reliably serves as a test for strong quantum supremacy since
 finding a solution to this problem should only be doable by a quantum computer.
 
-
 ### Bounty Funds
 
 The solver SHALL be reimbursed at least the cost of verifying the puzzle solutions. Therefore, to estimate the cost, an estimate
@@ -113,7 +110,7 @@ each of them, resulted in a cost of 583,338,223 gas. Providing a solution for a 
 The majority of the cost comes from verifying that the provided factors are indeed prime with the Miller-Rabin primality test.
 
 Since the number of factors in this [test](../assets/eip-X/test/bounty-contracts/prime-factoring-bounty/cost-of-solving-primes.test.ts) is greater than the expected number of factors of any integer, this may serve as an initial estimate of the cost to verify the solutions for randomly generated integers. Therefore, since the total cost is less than
-`MINIMUM_GAS_PAYOUT` gas, a bounty covering at least `MINIMUM_GAS_PAYOUT` should be funded to the contract.
+`MINIMUM_GAS_PAYOUT` gas, a bounty covering at least `MINIMUM_GAS_PAYOUT` should be funded to the contract. Note, this minimum viable incentive in terms of ETH is a moving target, as a function of the current Ethereum gas market. To help ensure incentive compatability of this bounty contract, the bounty funded should be at least many multiples over the current gas prices. 
 
 ## Test Cases
 
@@ -132,7 +129,7 @@ Since the number of factors in this [test](../assets/eip-X/test/bounty-contracts
 
 ### Bit-length of the integers
 Sander[^11] proves that difficult to factor numbers without a known factorization, called RSA-UFOs, can be generated.
-Using logic based on that described by Anoncoin using this method, this contract shall generate `NUMBER_OF_LOCKS` integers of 3 * `BIT_SIZE_OF_PRIMES` bits each to achieve a one in a billion chance of being insecure.
+Using logic based on that described by Anoncoin using this method, this contract shall generate `NUMBER_OF_LOCKS` integers of `3 * BIT_SIZE_OF_PRIMES` bits each to achieve a one in a billion chance of being insecure.
 
 #### Predicted security
 ##### Classical
@@ -145,7 +142,7 @@ Breaking 256-bit elliptic curve encryption is expected[^12] to require 2,330 qub
 
 One day is required before one can reveal a commitment. It is largely infeasible to censor an economically viable transaction for such a period of time.
 
-Assuming the reveal transaction is willing to pay market rate for transaction fees, the 1559 fee mechanism and its exponential adjustment makes it infeasible for an economic attacker to spam costly transactions to artifically increase the base-fee for extended period of time.
+Assuming the reveal transaction is willing to pay market rate for transaction fees, the 1559 fee mechanism and its exponential adjustment makes it infeasible for an economic attacker to spam costly transactions to artifically increase the base-fee for an extended period of time.
 
 Additionally, even if a large percentage of the proposers collude to censor, the inclusion of the reveal transaction on chain will be delayed but only as a function of the ratio of censoring to non-censoring proposers. E.g., if 90% of proposers censor, then the reveal transaction will take 10x as long as expected to be included -- on the order of 120s given mainnet block times. If, instead, 99% of proposers censor, then the transaction will take ~100x as long to be included -- on the order of 1200s. Still in these extreme regimes, reveal times on the order of a day are safe.
 
